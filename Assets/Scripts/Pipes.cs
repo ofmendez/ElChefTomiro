@@ -1,34 +1,31 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-public class Pipes : MonoBehaviour
+public class  Pipes : MonoBehaviour
 {
-	public Transform top;
-	public Transform bottom;
-	public float speed = 5f;
-	public float gap = 3f;
+  public Transform transformBlock1;
+  public Transform  transformBlock2;
+  public float speed = 5f;
+	private float leftEdge;
 	public GameObject pizza;
 
-	private float leftEdge;
 
-	private void Start()
-	{
-		leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 1f;
-		top.position += Vector3.up * gap / 2;
-		bottom.position += Vector3.down * gap / 2;
-	}
+  // Start is called once before the first execution of Update after the MonoBehaviour is created
+  void Start()
+  {
+		leftEdge = Camera.main.ScreenToWorldPoint(Vector3.zero).x - 2f;
+  }
 
-	private void Update()
-	{
-		transform.position += speed * Time.deltaTime * Vector3.left;
-
-		if (transform.position.x < leftEdge)
-		{
-			Destroy(gameObject);
-		}
-	}
-	public void Catch()
-	{
-		pizza.SetActive(false);
-	}
-
+  // Update is called once per frame
+  void Update()
+  {
+    transform.position += speed * Time.deltaTime * Vector3.left;
+    if (transform.position.x < leftEdge)
+    {
+      Destroy(gameObject);
+    }
+  }
+  public void Catch()
+  {
+    pizza.SetActive(false);
+  }
 }

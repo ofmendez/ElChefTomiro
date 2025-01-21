@@ -4,8 +4,8 @@ public class Spawner : MonoBehaviour
 {
     public Pipes prefab;
     public float spawnRate = 1f;
-    public float minHeight = -1f;
-    public float maxHeight = 2f;
+    public float minHeight;
+    public float maxHeight;
     public float verticalGap = 3f;
 
     private void OnEnable()
@@ -22,7 +22,7 @@ public class Spawner : MonoBehaviour
     {
         Pipes pipes = Instantiate(prefab, transform.position, Quaternion.identity);
         pipes.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
-        pipes.gap = verticalGap;
+        // pipes.gap = verticalGap;
     }
 
 }
