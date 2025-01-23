@@ -1,7 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
+public enum soundType
+{
+  Comida,
+  logo,
+  muerte,
+  Salto
+}
 [DefaultExecutionOrder(-1)]
+
 public class GameManager : MonoBehaviour
 {
 	public static GameManager Instance { get; private set; }
@@ -11,6 +20,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField] private Text scoreText;
 	[SerializeField] private GameObject playButton;
 	[SerializeField] private GameObject gameOver;
+	[SerializeField] private AudioClip[] sounds;
 
 	public int score { get; private set; } = 0;
 
@@ -75,7 +85,8 @@ public class GameManager : MonoBehaviour
 	{
 		playButton.SetActive(true);
 		gameOver.SetActive(true);
-
+    spawner.ResetSpeed();
+    PlaySound(soundType.muerte);
 		Pause();
 	}
 
@@ -83,6 +94,12 @@ public class GameManager : MonoBehaviour
 	{
 		score++;
 		scoreText.text = score.ToString();
+    PlaySound(soundType.Comida);
 	}
+
+  public void PlaySound(soundType type)
+  {
+    AudioSource.PlayClipAtPoint(sounds[(int)type], Camera.main.transform.position);
+  }
 
 }
