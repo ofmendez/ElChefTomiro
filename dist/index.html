@@ -7,7 +7,7 @@
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
     <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1" style="width: 1920px; height: 1080px; background: #231F20"></canvas>
-    <script src="Build/v3.loader.js"></script>
+    <script src="Build/v4.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -26,9 +26,9 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/v3.data.br",
-        frameworkUrl: "Build/v3.framework.js.br",
-        codeUrl: "Build/v3.wasm.br",
+        dataUrl: "Build/v4.data.unityweb",
+        frameworkUrl: "Build/v4.framework.js.unityweb",
+        codeUrl: "Build/v4.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ofmendez",
         productName: "ElChefTomiroUnity6V2",
