@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "ElChefTomiroUnity6.sln"
+    "dotnet.defaultSolution": "ElChefTomiroUnity6V2.sln"
 }

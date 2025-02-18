@@ -11,7 +11,8 @@ public class Spawner : MonoBehaviour
 
     private void OnEnable()
     {
-        InvokeRepeating(nameof(Spawn), 0, spawnRate);
+      ResetSpeed();
+      InvokeRepeating(nameof(Spawn), 0, spawnRate);
     }
 
     private void OnDisable()
@@ -30,7 +31,7 @@ public class Spawner : MonoBehaviour
         pipes.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
         pipes.SetBlockAndPizza(pipes.transform.position);
         pipes.AddToSpeed(incrementSpeed);
-        incrementSpeed += 0.1f;
+        incrementSpeed += 0.6f;
         // pipes.gap = verticalGap;
     }
 

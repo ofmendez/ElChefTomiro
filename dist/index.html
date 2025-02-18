@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | ElChefTomiroUnity6</title>
+    <title>Unity Web Player | ElChefTomiroUnity6V2</title>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 960px; height: 600px; background: #231F20"></canvas>
-    <script src="Build/v6.loader.js"></script>
+    <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1" style="width: 1920px; height: 1080px; background: #231F20"></canvas>
+    <script src="Build/v3.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -26,12 +26,12 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/v6.data.unityweb",
-        frameworkUrl: "Build/v6.framework.js.unityweb",
-        codeUrl: "Build/v6.wasm.unityweb",
+        dataUrl: "Build/v3.data.br",
+        frameworkUrl: "Build/v3.framework.js.br",
+        codeUrl: "Build/v3.wasm.br",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ofmendez",
-        productName: "ElChefTomiroUnity6",
+        productName: "ElChefTomiroUnity6V2",
         productVersion: "1.0",
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.

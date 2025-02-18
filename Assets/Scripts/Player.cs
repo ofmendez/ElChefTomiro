@@ -6,14 +6,21 @@ public class Player : MonoBehaviour
   public float strength = 5f;
   public float gravity = -9.81f;
   public float tilt = 5f;
+  public FallPlayer fall;
+  public Audio aud;
 
   private SpriteRenderer spriteRenderer;
   private Vector3 direction;
   private int spriteIndex;
 
+  private Vector3 initialPosition;
+  private Vector3 initialRotation;
+
   private void Awake()
   {
     spriteRenderer = GetComponent<SpriteRenderer>();
+    initialPosition = transform.position;
+    initialRotation = transform.eulerAngles;
   }
 
   private void Start()
@@ -21,12 +28,13 @@ public class Player : MonoBehaviour
     InvokeRepeating(nameof(AnimateSprite), 0.15f, 0.15f);
   }
 
-  private void OnEnable()
+  public void ResetPosition()
   {
-    Vector3 position = transform.position;
-    position.y = 0f;
-    transform.position = position;
+    transform.position = initialPosition;
+    transform.eulerAngles = initialRotation;
+    fall.enabled = false; 
     direction = Vector3.zero;
+    gravity = -9.81f;
   }
 
   private void Update()
@@ -35,7 +43,7 @@ public class Player : MonoBehaviour
     {
       if (transform.position.y < 5.2f)
       {
-        GameManager.Instance.PlaySound(soundType.Salto);
+        aud.PlaySound(soundType.salto);
         direction = Vector3.up * strength;
       }
     }
@@ -48,6 +56,11 @@ public class Player : MonoBehaviour
     Vector3 rotation = transform.eulerAngles;
     rotation.z = direction.y * tilt;
     transform.eulerAngles = rotation;
+  }
+
+  public void Fall()
+  {
+    fall.enabled = true; 
   }
 
   private void AnimateSprite()
@@ -70,6 +83,7 @@ public class Player : MonoBehaviour
     if (other.gameObject.CompareTag("Obstacle"))
     {
       GameManager.Instance.GameOver();
+      gravity = gravity* 500;
     }
     else if (other.gameObject.CompareTag("Scoring"))
     {

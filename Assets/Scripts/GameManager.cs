@@ -1,105 +1,158 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-public enum soundType
-{
-  Comida,
-  logo,
-  muerte,
-  Salto
-}
 [DefaultExecutionOrder(-1)]
 
 public class GameManager : MonoBehaviour
 {
-	public static GameManager Instance { get; private set; }
+  public static GameManager Instance { get; private set; }
 
-	[SerializeField] private Player player;
-	[SerializeField] private Spawner spawner;
-	[SerializeField] private Text scoreText;
-	[SerializeField] private GameObject playButton;
-	[SerializeField] private GameObject gameOver;
-	[SerializeField] private AudioClip[] sounds;
+  [SerializeField] private Player player;
+  [SerializeField] private Spawner spawner;
+  [SerializeField] private Text scoreText;
+  [SerializeField] private GameObject playButton;
+  [SerializeField] private GameObject gameOver;
+  [SerializeField] private GameObject header;
+  [SerializeField] private GameObject ranking;
+  [SerializeField] private Environment env;
+  [SerializeField] private Audio aud;
+  private Data data = new Data();
 
-	public int score { get; private set; } = 0;
+  public bool isPlaying { get; private set; } = false;
+  public bool isInterlude { get; private set; } = false;
+  public float timePlaying { get; private set; } = 0.0f;
 
-	private void Awake()
-	{
-		if (Instance != null)
-		{
-			DestroyImmediate(gameObject);
-		}
-		else
-		{
-			Instance = this;
-		}
-	}
+  private float scaleOfStop = 0.001f;
 
-	private void OnDestroy()
-	{
-		if (Instance == this)
-		{
-			Instance = null;
-		}
-	}
+  public int score { get; private set; } = 0;
 
-	private void Start()
-	{
-		Pause();
-	}
-	private void Update()
-	{
-		if ((Input.GetKeyDown(KeyCode.A) || Input.GetMouseButtonDown(0)) && gameOver.activeSelf)
-		{
-			Play();
-		}
-	}
-
-	public void Pause()
-	{
-		Time.timeScale = 0f;
-		player.enabled = false;
-	}
-
-	public void Play()
-	{
-		score = 0;
-		scoreText.text = score.ToString();
-
-		playButton.SetActive(false);
-		gameOver.SetActive(false);
-
-		Time.timeScale = 1f;
-		player.enabled = true;
-
-		Pipes[] pipes = FindObjectsByType<Pipes>(FindObjectsSortMode.None);
-
-		for (int i = 0; i < pipes.Length; i++)
-		{
-			Destroy(pipes[i].gameObject);
-		}
-	}
-
-	public void GameOver()
-	{
-		playButton.SetActive(true);
-		gameOver.SetActive(true);
-    spawner.ResetSpeed();
-    PlaySound(soundType.muerte);
-		Pause();
-	}
-
-	public void IncreaseScore()
-	{
-		score++;
-		scoreText.text = score.ToString();
-    PlaySound(soundType.Comida);
-	}
-
-  public void PlaySound(soundType type)
+  private void Awake()
   {
-    AudioSource.PlayClipAtPoint(sounds[(int)type], Camera.main.transform.position);
+    if (Instance != null)
+      DestroyImmediate(gameObject);
+    else
+      Instance = this;
+  }
+
+  private void OnDestroy()
+  {
+    if (Instance == this)
+      Instance = null;
+  }
+
+  private void Start()
+  {
+    aud.PlaySoundLoop(soundType.header);
+    Pause(0.0f);
+    data.InitRanking();
+  }
+  private void Update()
+  {
+    if ((Input.GetKeyDown(KeyCode.A) || Input.GetMouseButtonDown(0)) && !isPlaying)
+      StartCoroutine(isInterlude ? RankingSoundThenEnable() : InitSoundThenPlay());
+    if (isPlaying)
+    {
+      timePlaying += Time.deltaTime;
+      if (timePlaying > env.durationEnv)
+        ToggleDayNight();
+    }
+  }
+
+  private void ToggleDayNight()
+  {
+    timePlaying = 0.0f;
+    env.ToggleDayNight();
+  }
+
+  IEnumerator InitSoundThenPlay()
+  {
+    Ready();
+    yield return new WaitForSeconds(0.6f * scaleOfStop);
+    RemoveScreens();
+    yield return new WaitForSeconds(0.6f * scaleOfStop);
+    Play();
+  }
+
+  IEnumerator RankingSoundThenEnable()
+  {
+    if (!aud.isInSoundLoop)
+    {
+      aud.PlaySoundLoop(soundType.ranking);
+      ranking.SetActive(true);
+      yield return new WaitForSeconds(aud.Duration(soundType.ranking) * scaleOfStop * 9.0f);
+      aud.StopSoundLoop();
+      isInterlude = false;
+    }
+  }
+
+  public void Pause(float scale)
+  {
+    Time.timeScale = scale;
+    player.enabled = false;
+    spawner.enabled = false;
+  }
+
+  public void Ready()
+  {
+    aud.PlaySound(soundType.salto);
+    aud.PlaySound(soundType.go);
+    env.SetDayVisual();
+    Pipes[] pipes = FindObjectsByType<Pipes>(FindObjectsSortMode.None);
+    for (int i = 0; i < pipes.Length; i++)
+      Destroy(pipes[i].gameObject);
+    spawner.enabled = true;
+    Time.timeScale = scaleOfStop;
+    player.ResetPosition();
+    env.Reset();
+    score = 0;
+    scoreText.text = score.ToString();
+    timePlaying = 0.0f;
+    isPlaying = true;
+  }
+
+  private void RemoveScreens()
+  {
+    playButton.SetActive(false);
+    gameOver.SetActive(false);
+    ranking.SetActive(false);
+    header.SetActive(false);
+  }
+
+  public void Play()
+  {
+    aud.PlaySoundLoop(soundType.dayGameplay);
+    Time.timeScale = 1f;
+    player.enabled = true;
+  }
+
+  public void GameOver()
+  {
+    if (player.enabled)
+      StartCoroutine(ShowGameOver());
+  }
+
+  IEnumerator ShowGameOver()
+  {
+    aud.PlaySound(soundType.muerte);
+    aud.StopSoundLoop();
+    Pause(scaleOfStop);
+    data.AddScore(score);
+    yield return new WaitForSeconds(0.1f * scaleOfStop);
+    player.Fall();
+    yield return new WaitForSeconds(1.4f * scaleOfStop);
+    gameOver.SetActive(true);
+    env.SetDayVisual();
+    isPlaying = false;
+    isInterlude = true;
+    ranking.GetComponent<Ranking>().UpdateRanking(data);
+  }
+
+  public void IncreaseScore()
+  {
+    score++;
+    scoreText.text = score.ToString();
+    aud.PlaySound(soundType.comida);
   }
 
 }
