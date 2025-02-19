@@ -27,7 +27,7 @@ public class Data
     {
       Dictionary<string, int> rd = new Dictionary<string, int>();
       for (int i = 0; i < 11; i++)
-        rd.Add($"--", 0);
+        rd.Add($"--"+(new string(' ', i)), 0);
       RankingDict = rd;
       SetDictionary(ranking, RankingDict);
     }
