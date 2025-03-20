@@ -6,8 +6,8 @@
     <title>Unity Web Player | ElChefTomiroUnity6V2</title>
   </head>
   <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 960px;  background: #231F20"></canvas>
-    <script src="Build/v7.loader.js"></script>
+    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 960px; height: 600px; background: #231F20"></canvas>
+    <script src="Build/v8.loader.js"></script>
     <script>
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
@@ -18,7 +18,7 @@
 
         var canvas = document.querySelector("#unity-canvas");
         canvas.style.width = "100%";
-        // canvas.style.height = "100%";
+        canvas.style.height = "100%";
         canvas.style.position = "fixed";
 
         document.body.style.textAlign = "left";
@@ -26,9 +26,9 @@
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         arguments: [],
-        dataUrl: "Build/v7.data.unityweb",
-        frameworkUrl: "Build/v7.framework.js.unityweb",
-        codeUrl: "Build/v7.wasm.unityweb",
+        dataUrl: "Build/v8.data.unityweb",
+        frameworkUrl: "Build/v8.framework.js.unityweb",
+        codeUrl: "Build/v8.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "ofmendez",
         productName: "ElChefTomiroUnity6V2",
