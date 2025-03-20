@@ -319,7 +319,7 @@ MonoBehaviour:
   - {fileID: 3562506328536413734}
   - {fileID: 6693800376671908543}
   sprites:
-  - {fileID: 21300000, guid: 51ee8404c58d037a699aa9f4f1864c6d, type: 3}
+  - {fileID: 21300000, guid: 88a22750657c818fbbcbb3aa7ba8114a, type: 3}
   - {fileID: 21300000, guid: 49c0bf1dfccd820f58b026a6642131f9, type: 3}
   - {fileID: 21300000, guid: c923586972a4df02e9359ba5dabff3d5, type: 3}
   - {fileID: 21300000, guid: 4433192e341f7f820a27248b654120a1, type: 3}
@@ -330,6 +330,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d0efd81f465534f7b9ec11676bacadec, type: 3}
   - {fileID: 21300000, guid: 6f8393050efa4b53b9cdf2dc27038b5d, type: 3}
   - {fileID: 21300000, guid: 886cb5dc50999a0319986f89ddcef585, type: 3}
+  - {fileID: 21300000, guid: 51ee8404c58d037a699aa9f4f1864c6d, type: 3}
   speed: 5
   pizza: {fileID: 4605619312443980646}
 --- !u!1 &7661510863302118289

@@ -32,7 +32,6 @@ public class Spawner : MonoBehaviour
         pipes.SetBlockAndPizza(pipes.transform.position);
         pipes.AddToSpeed(incrementSpeed);
         incrementSpeed += 0.6f;
-        // pipes.gap = verticalGap;
     }
 
 }

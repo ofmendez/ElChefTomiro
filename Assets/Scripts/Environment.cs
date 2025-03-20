@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using System.Collections;
 
 public class Environment : MonoBehaviour
 {
@@ -12,19 +12,14 @@ public class Environment : MonoBehaviour
   public float durationEnv { get; private set; } = 30.0f;
   private Color initialBgColor;
 
+  private bool turningDay = false;
+  private bool turningNight = false;
+  public float turningTime = 0.0f;
+  private float transitionPeriod = 4.0f;
+
   private void Awake()
   {
     initialBgColor = backgroundMeshR.material.color;
-  }
-
-
-  public void ToggleDayNight()
-  {
-    if (isDay)
-      SetNight();
-    else
-      SetDay();
-    isDay = !isDay;
   }
 
   public void SetDayVisual()
@@ -33,37 +28,75 @@ public class Environment : MonoBehaviour
     {
       mat.color = Color.white;
     }
-    backgroundMeshR.material.color = initialBgColor;
     cloudsMeshR.material.color = Color.white;
+    backgroundMeshR.material.color = initialBgColor;
   }
-  private void SetNightVisual()
+  public void SetVisual(float clampValue)
   {
     foreach (Material mat in grassMaterials)
     {
-      mat.color = new Color(4 / 255f, 87 / 255f, 228 / 255f);
+      mat.color = Color.Lerp(Color.white, new Color(4 / 255f, 87 / 255f, 228 / 255f), clampValue);
     }
-    //rgb(36, 61, 71)
-    backgroundMeshR.material.color = new Color(36 / 255f, 61 / 255f, 71 / 255f);
-    //rgb(94, 94, 94)
-    cloudsMeshR.material.color = new Color(94 / 255f, 94 / 255f, 94 / 255f);
-
+    cloudsMeshR.material.color = Color.Lerp(Color.white, new Color(94 / 255f, 94 / 255f, 94 / 255f), clampValue);
+    backgroundMeshR.material.color = Color.Lerp(initialBgColor, new Color(36 / 255f, 61 / 255f, 71 / 255f), clampValue);
   }
-  private void SetDay()
+
+
+  void Update()
   {
-    SetDayVisual();
+    if (turningDay)
+    {
+      // clamp progressive color change by SetVisual in "transitionPeriod" seconds counting by turningTime:
+      SetVisual(1 - turningTime / transitionPeriod);
+      turningTime += Time.deltaTime;
+      if (turningTime > transitionPeriod)
+      {
+        turningDay = false;
+        turningTime = 0.0f;
+      }
+    }
+    if (turningNight)
+    {
+      // clamp progressive color change by SetVisual in "transitionPeriod" seconds counting by turningTime:
+      SetVisual( turningTime / transitionPeriod);
+      turningTime += Time.deltaTime;
+      if (turningTime > transitionPeriod)
+      {
+        turningNight = false;
+        turningTime = 0.0f;
+      }
+    }
+  }
+
+  public void InitDay()
+  {
     aud.PlaySoundLoop(soundType.dayGameplay);
+    StartCoroutine(TurnNight());
+  }
+  IEnumerator TurnNight()
+  {
+    yield return new WaitForSeconds(aud.Duration(soundType.dayGameplay));
+    turningNight = true;
+    aud.PlaySoundLoop(soundType.nightGameplay);
+    StartCoroutine(TurnDay());
   }
 
-  private void SetNight()
+  IEnumerator TurnDay()
   {
-    SetNightVisual();
-    aud.PlaySoundLoop(soundType.nightGameplay);
+    yield return new WaitForSeconds(aud.Duration(soundType.nightGameplay));
+    turningDay = true;
+    aud.PlaySoundLoop(soundType.dayGameplay);
+    StartCoroutine(TurnNight());
   }
 
   public void Reset()
   {
+    StopAllCoroutines();
     SetDayVisual();
     isDay = true;
+    turningDay = false;
+    turningNight = false;
+    turningTime = 0.0f;
   }
 
 

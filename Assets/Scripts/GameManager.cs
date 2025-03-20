@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
   public bool isInterlude { get; private set; } = false;
   public float timePlaying { get; private set; } = 0.0f;
 
-  private float scaleOfStop = 0.001f;
+  private float scaleOfStop = 0.001f; //change in  Ranking too
 
   public int score { get; private set; } = 0;
 
@@ -54,15 +54,7 @@ public class GameManager : MonoBehaviour
     if (isPlaying)
     {
       timePlaying += Time.deltaTime;
-      if (timePlaying > env.durationEnv)
-        ToggleDayNight();
     }
-  }
-
-  private void ToggleDayNight()
-  {
-    timePlaying = 0.0f;
-    env.ToggleDayNight();
   }
 
   IEnumerator InitSoundThenPlay()
@@ -121,7 +113,7 @@ public class GameManager : MonoBehaviour
 
   public void Play()
   {
-    aud.PlaySoundLoop(soundType.dayGameplay);
+    env.InitDay();
     Time.timeScale = 1f;
     player.enabled = true;
   }
@@ -141,6 +133,7 @@ public class GameManager : MonoBehaviour
     yield return new WaitForSeconds(0.1f * scaleOfStop);
     player.Fall();
     yield return new WaitForSeconds(1.4f * scaleOfStop);
+    player.SetFallSprite();
     gameOver.SetActive(true);
     env.SetDayVisual();
     isPlaying = false;
@@ -148,11 +141,11 @@ public class GameManager : MonoBehaviour
     ranking.GetComponent<Ranking>().UpdateRanking(data);
   }
 
-  public void IncreaseScore()
+  public void IncreaseScore(bool isLogo)
   {
     score++;
     scoreText.text = score.ToString();
-    aud.PlaySound(soundType.comida);
+    aud.PlaySound(isLogo ? soundType.go : soundType.comida);
   }
 
 }

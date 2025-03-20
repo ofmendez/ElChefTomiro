@@ -1,14 +1,33 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class Ranking : MonoBehaviour
 {
   List<RankingCard> rankingCards = new List<RankingCard>();
+  float timeInsideRanking = 0.0f;
+  float scaleOfStop = 0.001f; //change in  Ranking GameManager
+  float timeToStay = 60.0f;
     void LoadCards()
     {
       rankingCards = GetComponentsInChildren<RankingCard>( true ).ToList();
     }
+
+    void OnEnable(){
+      timeInsideRanking = 0.0f;
+    }
+
+    void Update()
+    {
+      timeInsideRanking += Time.deltaTime;
+      if (timeInsideRanking > timeToStay*scaleOfStop)
+      {
+        timeInsideRanking = 0.0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+      }
+    }
+
 
     public void UpdateRanking(Data data)
     {
