@@ -31,7 +31,7 @@ public class Spawner : MonoBehaviour
         pipes.transform.position += Vector3.up * Random.Range(minHeight, maxHeight);
         pipes.SetBlockAndPizza(pipes.transform.position);
         pipes.AddToSpeed(incrementSpeed);
-        incrementSpeed += 0.6f;
+        incrementSpeed += 0.006f;
     }
 
 }

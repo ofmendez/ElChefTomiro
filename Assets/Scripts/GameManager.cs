@@ -89,14 +89,14 @@ public class GameManager : MonoBehaviour
   {
     aud.PlaySound(soundType.salto);
     aud.PlaySound(soundType.go);
-    env.SetDayVisual();
+    // env.SetDayVisual();
+    env.Reset();
     Pipes[] pipes = FindObjectsByType<Pipes>(FindObjectsSortMode.None);
     for (int i = 0; i < pipes.Length; i++)
       Destroy(pipes[i].gameObject);
     spawner.enabled = true;
     Time.timeScale = scaleOfStop;
     player.ResetPosition();
-    env.Reset();
     score = 0;
     scoreText.text = score.ToString();
     timePlaying = 0.0f;
@@ -113,7 +113,7 @@ public class GameManager : MonoBehaviour
 
   public void Play()
   {
-    env.InitDay();
+    env.Init();
     Time.timeScale = 1f;
     player.enabled = true;
   }
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
     yield return new WaitForSeconds(1.4f * scaleOfStop);
     player.SetFallSprite();
     gameOver.SetActive(true);
-    env.SetDayVisual();
+    //env.SetDayVisual();
     isPlaying = false;
     isInterlude = true;
     ranking.GetComponent<Ranking>().UpdateRanking(data);

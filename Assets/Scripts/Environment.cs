@@ -20,6 +20,8 @@ public class Environment : MonoBehaviour
   private void Awake()
   {
     initialBgColor = backgroundMeshR.material.color;
+    isDay = true;
+    SetDayVisual();
   }
 
   public void SetDayVisual()
@@ -31,6 +33,7 @@ public class Environment : MonoBehaviour
     cloudsMeshR.material.color = Color.white;
     backgroundMeshR.material.color = initialBgColor;
   }
+
   public void SetVisual(float clampValue)
   {
     foreach (Material mat in grassMaterials)
@@ -51,6 +54,7 @@ public class Environment : MonoBehaviour
       turningTime += Time.deltaTime;
       if (turningTime > transitionPeriod)
       {
+        isDay = true;
         turningDay = false;
         turningTime = 0.0f;
       }
@@ -62,16 +66,17 @@ public class Environment : MonoBehaviour
       turningTime += Time.deltaTime;
       if (turningTime > transitionPeriod)
       {
+        isDay = false;
         turningNight = false;
         turningTime = 0.0f;
       }
     }
   }
 
-  public void InitDay()
+  public void Init()
   {
-    aud.PlaySoundLoop(soundType.dayGameplay);
-    StartCoroutine(TurnNight());
+    aud.PlaySoundLoop( isDay? soundType.dayGameplay:soundType.nightGameplay);
+    StartCoroutine(isDay?  TurnNight():TurnDay());
   }
   IEnumerator TurnNight()
   {
@@ -92,8 +97,18 @@ public class Environment : MonoBehaviour
   public void Reset()
   {
     StopAllCoroutines();
-    SetDayVisual();
-    isDay = true;
+    if (turningDay)
+    {
+      SetVisual(0 );
+      isDay = true;
+    }
+    if (turningNight)
+    {
+      SetVisual(1);
+      isDay = false;
+    }
+    // SetDayVisual();
+    // isDay = true;
     turningDay = false;
     turningNight = false;
     turningTime = 0.0f;

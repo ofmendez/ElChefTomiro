@@ -1192,7 +1192,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169454704}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -4483,7 +4483,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.30447912, y: 0.78700006}
   m_AnchorMax: {x: 0.693, y: 0.9738519}
-  m_AnchoredPosition: {x: 2.4826965, y: 1.1579895}
+  m_AnchoredPosition: {x: 2.482666, y: 1.157959}
   m_SizeDelta: {x: -4.9653015, y: 2.316}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1055861026
